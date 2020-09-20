@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style>
+		* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:#2C3335;
+}
+
+canvas {
+  background: #2C3335;
+  border: 2px solid rgba(0, 0, 0, 0.4);
+  border-radius: 0.2rem;
+  width: 40rem;
+  height: 24rem;
+  cursor: crosshair;
+
+  transition: border-color 0.2s;
+}
+
+canvas:active {
+  border-color:#EEC213;
+}
+
+	</style>
+</head>
+<body>
+
+	<canvas id="paint-board"></canvas>
+
+<script>
+	const canvas = document.getElementById("paint-board");
+const context = canvas.getContext("2d");
+
+canvas.width = canvas.getBoundingClientRect().width;
+canvas.height = canvas.getBoundingClientRect().height;
+
+context.lineJoin = "round";
+context.lineCap = "round";
+context.lineWidth = 2;
+context.strokeStyle = "#EEC213";
+
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+
+function draw(event) {
+  if (!isDrawing) return;
+
+  context.beginPath();
+  context.moveTo(lastX, lastY);
+  context.lineTo(event.offsetX, event.offsetY);
+  context.stroke();
+
+  lastX = event.offsetX;
+  lastY = event.offsetY;
+}
+
+canvas.addEventListener("mousedown", (event) => {
+  isDrawing = true;
+
+  lastX = event.offsetX;
+  lastY = event.offsetY;
+});
+
+canvas.addEventListener("mousemove", draw);
+canvas.addEventListener("mouseup", () => (isDrawing = false));
+canvas.addEventListener("mouseout", () => (isDrawing = false));
+
+</script>
+</body>
+</html>
